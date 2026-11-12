@@ -1,12 +1,38 @@
 services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-matchpulse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-matchpulse}
+      POSTGRES_DB: ${POSTGRES_DB:-matchpulse}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Not published to the host by default. Uncomment to connect with a GUI tool:
+    # ports:
+    #   - "127.0.0.1:5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   api:
     build: ./backend
     env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-matchpulse}:${POSTGRES_PASSWORD:-matchpulse}@db:5432/${POSTGRES_DB:-matchpulse}
     ports:
       - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
       interval: 15s
       timeout: 5s
       retries: 3
+
+volumes:
+  pgdata:

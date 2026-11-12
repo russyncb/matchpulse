@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.api.routes import health
+from app.api.routes import catalog, health
 from app.config import get_settings
 from app.core.logging import configure_logging
 
@@ -21,3 +21,4 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title=settings.app_name, version=settings.app_version, lifespan=lifespan)
 app.include_router(health.router, prefix="/api/v1")
+app.include_router(catalog.router, prefix="/api/v1")
