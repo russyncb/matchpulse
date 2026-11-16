@@ -51,7 +51,8 @@ def migrated_database():
 def clean_tables(migrated_database):
     with engine.begin() as conn:
         conn.execute(text(
-            "TRUNCATE alerts, match_snapshots, match_events, matches, rules, teams, competitions "
+            "TRUNCATE alerts, match_snapshots, match_events, matches, rules, teams, competitions, "
+            "api_usage, provider_state "
             "RESTART IDENTITY CASCADE"
         ))
 

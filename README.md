@@ -25,3 +25,10 @@ or add a bind mount for ./backend/alembic/versions while developing.
 
 ## Inspect the database
     docker compose exec db psql -U matchpulse -d matchpulse -c '\dt'
+
+## Providers (Phase 3A)
+Providers are adapters that return MatchPulse's internal data classes (`app/providers/models.py`).
+All calls go through `ProviderGateway`, which tracks usage per provider, enforces hourly/daily
+budgets, retries transient errors and never lets a provider failure crash the app.
+A `ReplayProvider` replays a scripted match for tests and demos (no API key needed).
+    curl http://localhost:8000/api/v1/providers/status

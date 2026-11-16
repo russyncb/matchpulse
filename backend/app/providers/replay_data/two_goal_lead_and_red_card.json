@@ -1,0 +1,34 @@
+{
+  "provider": "replay",
+  "competition": {"provider_id": "REP-LG", "name": "Replay League", "country": "Testland"},
+  "teams": {
+    "home": {"provider_id": "REP-RED", "name": "Replay Reds"},
+    "away": {"provider_id": "REP-BLU", "name": "Replay Blues"}
+  },
+  "match": {"provider_id": "REP-M1", "kickoff": "2026-11-14T15:00:00+00:00"},
+  "steps": [
+    {"status": "IN_PLAY", "elapsed_minute": 5, "home_score": 0, "away_score": 0, "events": []},
+    {"status": "IN_PLAY", "elapsed_minute": 23, "home_score": 1, "away_score": 0,
+     "events": [{"id": "e1", "type": "goal", "minute": 23, "team": "home", "player": "A. Striker"}]},
+    {"status": "IN_PLAY", "elapsed_minute": 41, "home_score": 2, "away_score": 0,
+     "events": [{"id": "e1", "type": "goal", "minute": 23, "team": "home", "player": "A. Striker"},
+                {"id": "e2", "type": "goal", "minute": 41, "team": "home", "player": "B. Winger"}]},
+    {"status": "HALF_TIME", "elapsed_minute": 45, "home_score": 2, "away_score": 0,
+     "events": [{"id": "e1", "type": "goal", "minute": 23, "team": "home", "player": "A. Striker"},
+                {"id": "e2", "type": "goal", "minute": 41, "team": "home", "player": "B. Winger"}]},
+    {"status": "IN_PLAY", "elapsed_minute": 58, "home_score": 2, "away_score": 0,
+     "events": [{"id": "e1", "type": "goal", "minute": 23, "team": "home", "player": "A. Striker"},
+                {"id": "e2", "type": "goal", "minute": 41, "team": "home", "player": "B. Winger"},
+                {"id": "e3", "type": "red_card", "minute": 58, "team": "away", "player": "C. Defender"}]},
+    {"status": "IN_PLAY", "elapsed_minute": 82, "home_score": 2, "away_score": 1,
+     "events": [{"id": "e1", "type": "goal", "minute": 23, "team": "home", "player": "A. Striker"},
+                {"id": "e2", "type": "goal", "minute": 41, "team": "home", "player": "B. Winger"},
+                {"id": "e3", "type": "red_card", "minute": 58, "team": "away", "player": "C. Defender"},
+                {"id": "e4", "type": "goal", "minute": 82, "team": "away", "player": "D. Forward"}]},
+    {"status": "FINISHED", "elapsed_minute": 90, "home_score": 2, "away_score": 1,
+     "events": [{"id": "e1", "type": "goal", "minute": 23, "team": "home", "player": "A. Striker"},
+                {"id": "e2", "type": "goal", "minute": 41, "team": "home", "player": "B. Winger"},
+                {"id": "e3", "type": "red_card", "minute": 58, "team": "away", "player": "C. Defender"},
+                {"id": "e4", "type": "goal", "minute": 82, "team": "away", "player": "D. Forward"}]}
+  ]
+}
