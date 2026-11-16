@@ -12,7 +12,7 @@ from app.db.session import SessionLocal
 from app.models import ProviderState
 from app.providers.base import FootballProvider
 from app.providers.errors import (
-    BadResponse, ProviderBlocked, ProviderDown, ProviderError, QuotaExhausted, RateLimited,
+    AuthError, BadResponse, ProviderBlocked, ProviderDown, ProviderError, QuotaExhausted, RateLimited,
 )
 from app.services import usage
 
@@ -27,6 +27,7 @@ class ProviderGateway:
     def __init__(self, provider: FootballProvider, *, hourly_limit: int | None = None,
                  daily_limit: int | None = None, max_attempts: int = 3, backoff_seconds: float = 1.0,
                  down_cooldown_seconds: float = 120, default_block_seconds: float = 3600,
+                 auth_block_seconds: float = 3600,
                  session_factory=SessionLocal, clock=_utcnow, sleep=time.sleep):
         self.provider = provider
         self.name = provider.name
@@ -36,6 +37,7 @@ class ProviderGateway:
         self.backoff_seconds = backoff_seconds
         self.down_cooldown_seconds = down_cooldown_seconds
         self.default_block_seconds = default_block_seconds
+        self.auth_block_seconds = auth_block_seconds
         self._session_factory = session_factory
         self._clock = clock
         self._sleep = sleep
@@ -56,6 +58,10 @@ class ProviderGateway:
             except QuotaExhausted as exc:
                 self._failed()
                 self._block("quota_exhausted", exc.retry_after or self.default_block_seconds, str(exc))
+                raise
+            except AuthError as exc:
+                self._failed()
+                self._block("down", self.auth_block_seconds, str(exc))
                 raise
             except ProviderDown as exc:
                 self._failed()

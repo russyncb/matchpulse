@@ -30,3 +30,7 @@ class BadResponse(ProviderError):
 
 class ProviderBlocked(ProviderError):
     """Raised by the gateway WITHOUT calling the provider (cooling down or out of budget)."""
+
+
+class AuthError(ProviderError):
+    """Bad/missing token or the plan does not allow this endpoint. Retrying cannot help."""

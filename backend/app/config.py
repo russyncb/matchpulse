@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     app_version: str = "0.1.0"
     environment: str = "development"
     log_level: str = "INFO"
+    sportmonks_api_token: str | None = None
+    # Free plan allows 180 calls/hour per entity; stay a little under it.
+    sportmonks_hourly_limit: int = 170
     database_url: str = "postgresql+psycopg://matchpulse:matchpulse@db:5432/matchpulse"
 
     # Read from environment variables or a local .env file (never committed).

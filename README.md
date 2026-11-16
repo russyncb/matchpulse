@@ -32,3 +32,13 @@ All calls go through `ProviderGateway`, which tracks usage per provider, enforce
 budgets, retries transient errors and never lets a provider failure crash the app.
 A `ReplayProvider` replays a scripted match for tests and demos (no API key needed).
     curl http://localhost:8000/api/v1/providers/status
+
+## Sportmonks (Phase 3B)
+Put your free-plan token in `.env` as `SPORTMONKS_API_TOKEN=...` (never commit it), then
+`docker compose up -d` to apply it. The adapter is `app/providers/sportmonks.py`; the token is sent
+in a header, not the URL. To capture raw responses safely (one API request each):
+
+    docker compose exec -T api python -m app.tools.sportmonks_probe leagues > leagues.json
+    docker compose exec -T api python -m app.tools.sportmonks_probe livescores > livescores.json
+    docker compose exec -T api python -m app.tools.sportmonks_probe inplay > inplay.json
+    docker compose exec -T api python -m app.tools.sportmonks_probe fixture 19722750 > fixture.json

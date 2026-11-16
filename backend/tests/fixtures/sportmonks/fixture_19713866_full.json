@@ -1,0 +1,399 @@
+{
+ "data": {
+  "id": 19713866,
+  "sport_id": 1,
+  "league_id": 271,
+  "season_id": 27897,
+  "stage_id": 77482407,
+  "group_id": null,
+  "aggregate_id": null,
+  "round_id": 407041,
+  "state_id": 5,
+  "venue_id": 5655,
+  "name": "FC København vs Brøndby IF",
+  "starting_at": "2026-11-08 11:00:00",
+  "result_info": "FC København won after full-time.",
+  "leg": "1/1",
+  "details": null,
+  "length": 90,
+  "placeholder": false,
+  "has_odds": true,
+  "has_premium_odds": true,
+  "starting_at_timestamp": 1794135600,
+  "events": [
+   {
+    "id": 158598430,
+    "fixture_id": 19713866,
+    "period_id": 7222789,
+    "participant_id": 85,
+    "type_id": 14,
+    "section": "event",
+    "player_id": 37609216,
+    "related_player_id": null,
+    "player_name": "William Clem",
+    "related_player_name": null,
+    "result": "1-0",
+    "info": "Left foot shot",
+    "addition": "1st Goal",
+    "minute": 54,
+    "extra_minute": null,
+    "injured": null,
+    "on_bench": false,
+    "coach_id": null,
+    "sub_type_id": 1521,
+    "detailed_period_id": 7222789,
+    "rescinded": null,
+    "sort_order": 1
+   },
+   {
+    "id": 158598765,
+    "fixture_id": 19713866,
+    "period_id": 7222789,
+    "participant_id": 293,
+    "type_id": 18,
+    "section": "event",
+    "player_id": 205944,
+    "related_player_id": 37738599,
+    "player_name": "Emmanuel Dennis",
+    "related_player_name": "Jacob Brøchner Ambæk",
+    "result": null,
+    "info": null,
+    "addition": "1st Substitution",
+    "minute": 63,
+    "extra_minute": null,
+    "injured": null,
+    "on_bench": false,
+    "coach_id": null,
+    "sub_type_id": null,
+    "detailed_period_id": 7222789,
+    "rescinded": null,
+    "sort_order": 1
+   },
+   {
+    "id": 158598774,
+    "fixture_id": 19713866,
+    "period_id": 7222789,
+    "participant_id": 293,
+    "type_id": 18,
+    "section": "event",
+    "player_id": 37445147,
+    "related_player_id": 37522720,
+    "player_name": "Sho Fukuda",
+    "related_player_name": "Filip Bundgaard Kristensen",
+    "result": null,
+    "info": null,
+    "addition": "2nd Substitution",
+    "minute": 63,
+    "extra_minute": null,
+    "injured": null,
+    "on_bench": false,
+    "coach_id": null,
+    "sub_type_id": null,
+    "detailed_period_id": 7222789,
+    "rescinded": null,
+    "sort_order": 2
+   },
+   {
+    "id": 158596753,
+    "fixture_id": 19713866,
+    "period_id": 7222483,
+    "participant_id": 85,
+    "type_id": 19,
+    "section": "event",
+    "player_id": 37565765,
+    "related_player_id": null,
+    "player_name": "Rodrigo Huescas",
+    "related_player_name": null,
+    "result": null,
+    "info": "Off the ball foul",
+    "addition": "1st Yellowcard",
+    "minute": 10,
+    "extra_minute": null,
+    "injured": null,
+    "on_bench": false,
+    "coach_id": null,
+    "sub_type_id": 1506,
+    "detailed_period_id": 7222483,
+    "rescinded": false,
+    "sort_order": 1
+   },
+   {
+    "id": 158596927,
+    "fixture_id": 19713866,
+    "period_id": 7222483,
+    "participant_id": 85,
+    "type_id": 19,
+    "section": "event",
+    "player_id": 84602,
+    "related_player_id": null,
+    "player_name": "Mads Emil Madsen",
+    "related_player_name": null,
+    "result": null,
+    "info": "Foul",
+    "addition": "2nd Yellowcard",
+    "minute": 18,
+    "extra_minute": null,
+    "injured": null,
+    "on_bench": false,
+    "coach_id": null,
+    "sub_type_id": 1496,
+    "detailed_period_id": 7222483,
+    "rescinded": false,
+    "sort_order": 2
+   },
+   {
+    "id": 158598532,
+    "fixture_id": 19713866,
+    "period_id": 7222789,
+    "participant_id": 293,
+    "type_id": 19,
+    "section": "event",
+    "player_id": 37625601,
+    "related_player_id": null,
+    "player_name": "Max Isaac Ejdum",
+    "related_player_name": null,
+    "result": null,
+    "info": "Foul",
+    "addition": "3rd Yellowcard",
+    "minute": 57,
+    "extra_minute": null,
+    "injured": null,
+    "on_bench": false,
+    "coach_id": null,
+    "sub_type_id": 1496,
+    "detailed_period_id": 7222789,
+    "rescinded": false,
+    "sort_order": 3
+   },
+   {
+    "id": 158599301,
+    "fixture_id": 19713866,
+    "period_id": 7222789,
+    "participant_id": 293,
+    "type_id": 19,
+    "section": "event",
+    "player_id": 205944,
+    "related_player_id": null,
+    "player_name": "Emmanuel Dennis",
+    "related_player_name": null,
+    "result": null,
+    "info": "Argument",
+    "addition": "4th Yellowcard",
+    "minute": 76,
+    "extra_minute": null,
+    "injured": null,
+    "on_bench": false,
+    "coach_id": null,
+    "sub_type_id": 1497,
+    "detailed_period_id": 7222789,
+    "rescinded": false,
+    "sort_order": 4
+   }
+  ],
+  "participants": [
+   {
+    "id": 293,
+    "sport_id": 1,
+    "country_id": 320,
+    "venue_id": 5659,
+    "gender": "male",
+    "name": "Brøndby IF",
+    "short_code": "BIF",
+    "image_path": "https://cdn.sportmonks.com/images/soccer/teams/5/293.png",
+    "founded": 1964,
+    "type": "domestic",
+    "placeholder": false,
+    "last_played_at": "2026-11-08 11:00:00",
+    "meta": {
+     "location": "away",
+     "winner": false,
+     "position": 4
+    }
+   },
+   {
+    "id": 85,
+    "sport_id": 1,
+    "country_id": 320,
+    "venue_id": 5655,
+    "gender": "male",
+    "name": "FC København",
+    "short_code": "COP",
+    "image_path": "https://cdn.sportmonks.com/images/soccer/teams/21/85.png",
+    "founded": 1992,
+    "type": "domestic",
+    "placeholder": false,
+    "last_played_at": "2026-11-08 11:00:00",
+    "meta": {
+     "location": "home",
+     "winner": true,
+     "position": 2
+    }
+   }
+  ],
+  "scores": [
+   {
+    "id": 37670954,
+    "fixture_id": 19713866,
+    "type_id": 1,
+    "participant_id": 85,
+    "score": {
+     "goals": 0,
+     "participant": "home"
+    },
+    "description": "1ST_HALF"
+   },
+   {
+    "id": 37670949,
+    "fixture_id": 19713866,
+    "type_id": 1,
+    "participant_id": 293,
+    "score": {
+     "goals": 0,
+     "participant": "away"
+    },
+    "description": "1ST_HALF"
+   },
+   {
+    "id": 37670957,
+    "fixture_id": 19713866,
+    "type_id": 2,
+    "participant_id": 85,
+    "score": {
+     "goals": 1,
+     "participant": "home"
+    },
+    "description": "2ND_HALF"
+   },
+   {
+    "id": 37670955,
+    "fixture_id": 19713866,
+    "type_id": 2,
+    "participant_id": 293,
+    "score": {
+     "goals": 0,
+     "participant": "away"
+    },
+    "description": "2ND_HALF"
+   },
+   {
+    "id": 37670947,
+    "fixture_id": 19713866,
+    "type_id": 1525,
+    "participant_id": 85,
+    "score": {
+     "goals": 1,
+     "participant": "home"
+    },
+    "description": "CURRENT"
+   },
+   {
+    "id": 37670945,
+    "fixture_id": 19713866,
+    "type_id": 1525,
+    "participant_id": 293,
+    "score": {
+     "goals": 0,
+     "participant": "away"
+    },
+    "description": "CURRENT"
+   },
+   {
+    "id": 37673721,
+    "fixture_id": 19713866,
+    "type_id": 48996,
+    "participant_id": 85,
+    "score": {
+     "goals": 1,
+     "participant": "home"
+    },
+    "description": "2ND_HALF_ONLY"
+   },
+   {
+    "id": 37673722,
+    "fixture_id": 19713866,
+    "type_id": 48996,
+    "participant_id": 293,
+    "score": {
+     "goals": 0,
+     "participant": "away"
+    },
+    "description": "2ND_HALF_ONLY"
+   }
+  ],
+  "state": {
+   "id": 5,
+   "state": "FT",
+   "name": "Full Time",
+   "short_name": "FT",
+   "developer_name": "FT"
+  },
+  "league": {
+   "id": 271,
+   "sport_id": 1,
+   "country_id": 320,
+   "name": "Superliga",
+   "active": true,
+   "short_code": "DNK SL",
+   "image_path": "https://cdn.sportmonks.com/images/soccer/leagues/271.png",
+   "type": "league",
+   "sub_type": "domestic",
+   "last_played_at": "2026-11-08 17:00:00",
+   "category": 2,
+   "has_jerseys": false
+  },
+  "periods": [
+   {
+    "id": 7222483,
+    "fixture_id": 19713866,
+    "type_id": 1,
+    "started": 1794135928,
+    "ended": 1794138705,
+    "counts_from": 0,
+    "ticking": false,
+    "sort_order": 1,
+    "description": "1st-half",
+    "time_added": 1,
+    "period_length": 45,
+    "minutes": 46,
+    "seconds": 17,
+    "has_timer": false
+   },
+   {
+    "id": 7222789,
+    "fixture_id": 19713866,
+    "type_id": 2,
+    "started": 1794139721,
+    "ended": 1794142841,
+    "counts_from": 45,
+    "ticking": false,
+    "sort_order": 2,
+    "description": "2nd-half",
+    "time_added": 7,
+    "period_length": 45,
+    "minutes": 97,
+    "seconds": 0,
+    "has_timer": false
+   }
+  ]
+ },
+ "subscription": [
+  {
+   "meta": [],
+   "plans": [
+    {
+     "plan": "Football Free Plan",
+     "sport": "Football",
+     "category": "Standard"
+    }
+   ],
+   "add_ons": [],
+   "widgets": []
+  }
+ ],
+ "rate_limit": {
+  "resets_in_seconds": 3000,
+  "remaining": 174,
+  "requested_entity": "Fixture"
+ },
+ "timezone": "UTC"
+}

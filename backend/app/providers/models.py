@@ -3,8 +3,10 @@
 Every adapter converts its provider's JSON into these classes. Nothing downstream
 (ingestion, rules engine, dashboard) ever sees a provider-specific shape.
 
-Internal event_type values: goal, own_goal, penalty_goal, yellow_card, red_card,
-substitution, var. Adapters map provider labels onto these.
+Internal event_type values: goal, own_goal, penalty_goal, missed_penalty, yellow_card,
+red_card, yellow_red_card (second yellow), substitution, var, shootout_goal, shootout_miss,
+other. Adapters map provider labels onto these. A rule about "red cards" should count both
+red_card and yellow_red_card. elapsed_minute includes stoppage time (45+2 is stored as 47).
 """
 import hashlib
 from dataclasses import dataclass

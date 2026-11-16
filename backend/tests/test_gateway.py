@@ -133,3 +133,16 @@ def test_unexpected_adapter_bug_becomes_bad_response(clock):
     with pytest.raises(BadResponse):
         gateway(p, clock).fetch("get_live_fixtures")
     assert stats(clock)[0] == 1
+
+
+def test_auth_error_blocks_for_an_hour_and_stops_hammering(clock):
+    from app.providers.errors import AuthError
+    p = ScriptedProvider(AuthError("bad token"))
+    gw = gateway(p, clock)
+    with pytest.raises(AuthError):
+        gw.fetch("get_live_fixtures")
+    assert stats(clock)[1].status == "down"
+    clock.advance(minutes=30)
+    with pytest.raises(ProviderBlocked):
+        gw.fetch("get_live_fixtures")
+    assert p.calls == 1
