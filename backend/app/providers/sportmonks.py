@@ -133,8 +133,9 @@ def parse_fixture(raw: dict) -> FixtureData:
         raise ValueError("league include missing")
 
     side_by_participant = {sides["home"]["id"]: "home", sides["away"]["id"]: "away"}
-    events = tuple(
-        e for e in (_parse_event(ev, side_by_participant) for ev in raw.get("events") or []) if e
+    raw_events = raw.get("events")  # key absent = include not applied = "not fetched"
+    events = None if raw_events is None else tuple(
+        e for e in (_parse_event(ev, side_by_participant) for ev in raw_events) if e
     )
     home_score, away_score = _current_score(raw.get("scores") or [])
     return FixtureData(

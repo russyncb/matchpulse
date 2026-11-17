@@ -42,3 +42,22 @@ in a header, not the URL. To capture raw responses safely (one API request each)
     docker compose exec -T api python -m app.tools.sportmonks_probe livescores > livescores.json
     docker compose exec -T api python -m app.tools.sportmonks_probe inplay > inplay.json
     docker compose exec -T api python -m app.tools.sportmonks_probe fixture 19722750 > fixture.json
+
+## Worker (Phase 4)
+The `worker` container keeps the database current: competitions + fixtures every 6 hours, live
+polling every 60 seconds (only when a match is live or about to start, otherwise no API request),
+snapshots on every score/status change and every 5 minutes while live, and a 10-minute check that
+re-fetches matches stuck in a live state. Job timings are stored in the database, so a restart
+resumes the schedule.
+
+    docker compose logs -f worker
+    curl http://localhost:8000/api/v1/system/status          # worker alive? last run of each job
+    curl http://localhost:8000/api/v1/providers/status       # per-provider usage and cool-downs
+    curl "http://localhost:8000/api/v1/matches?status=IN_PLAY"
+    curl http://localhost:8000/api/v1/matches/1/snapshots    # score/status history
+    curl http://localhost:8000/api/v1/matches/1/events
+
+**Demo without waiting for a matchday:** add `ACTIVE_PROVIDER=replay` and `LIVE_POLL_SECONDS=5` to
+`.env`, run `docker compose up -d`, and watch a scripted match play out (2 goals, a red card, a late
+goal) in about 40 seconds. Remove those lines and run `docker compose down -v` afterwards to wipe the
+demo data, then start normally.

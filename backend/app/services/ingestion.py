@@ -1,7 +1,7 @@
 """Writes provider-neutral data into PostgreSQL. Safe to run repeatedly (idempotent upserts)."""
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from sqlalchemy import Boolean, func, literal_column
+from sqlalchemy import Boolean, delete, func, literal_column
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
@@ -16,6 +16,8 @@ class IngestResult:
     matches_created: int = 0
     matches_updated: int = 0
     events_created: int = 0
+    events_deleted: int = 0
+    match_ids: list[int] = field(default_factory=list)  # every match touched, in order
 
 
 # In PostgreSQL, xmax = 0 on a returned row means it was freshly INSERTed, not updated.
@@ -99,6 +101,10 @@ class IngestionService:
         else:
             result.matches_updated += 1
 
+        result.match_ids.append(match_id)
+        if f.events is None:  # events were not fetched; never delete what we cannot see
+            return
+
         sides = {"home": home_id, "away": away_id}
         for ev in f.events:
             stmt = (
@@ -111,3 +117,14 @@ class IngestionService:
             )
             if self.db.execute(stmt).first() is not None:
                 result.events_created += 1
+
+        # The provider's list is the full truth: events it no longer reports were cancelled
+        # (e.g. a red card overturned by VAR), so they must not keep driving rules.
+        gone = self.db.execute(
+            delete(MatchEvent).where(
+                MatchEvent.match_id == match_id,
+                MatchEvent.provider == f.provider,
+                MatchEvent.provider_event_id.not_in([e.provider_event_id for e in f.events]),
+            )
+        )
+        result.events_deleted += gone.rowcount

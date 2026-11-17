@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Index, func, text
+from sqlalchemy import DateTime, ForeignKey, Index, String, func, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -18,6 +18,7 @@ class MatchSnapshot(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     match_id: Mapped[int] = mapped_column(ForeignKey("matches.id", ondelete="CASCADE"))
+    status: Mapped[str | None] = mapped_column(String(20))
     elapsed_minute: Mapped[int | None]
     home_score: Mapped[int] = mapped_column(server_default=text("0"))
     away_score: Mapped[int] = mapped_column(server_default=text("0"))

@@ -63,7 +63,9 @@ class FixtureData:
     elapsed_minute: int | None = None
     home_score: int = 0
     away_score: int = 0
-    events: tuple[EventData, ...] = ()
+    # None = the provider call did not include events (leave stored events alone);
+    # () = the provider says there are none (stored events not in this list are removed).
+    events: tuple[EventData, ...] | None = None
 
     def __post_init__(self):
         if self.kickoff.tzinfo is None:

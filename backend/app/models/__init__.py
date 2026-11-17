@@ -7,9 +7,10 @@ from app.models.match_event import MatchEvent
 from app.models.match_snapshot import MatchSnapshot
 from app.models.provider_state import ProviderState
 from app.models.rule import Rule
+from app.models.sync_status import SyncStatus
 from app.models.team import Team
 
 __all__ = [
     "Alert", "AlertState", "ApiUsage", "ProviderState", "Competition", "Match", "MatchEvent",
-    "MatchSnapshot", "MatchStatus", "Rule", "Team",
+    "MatchSnapshot", "MatchStatus", "Rule", "SyncStatus", "Team",
 ]

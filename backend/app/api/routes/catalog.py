@@ -4,9 +4,10 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.models import Competition, Match, Team
+from app.models import Competition, Match, MatchEvent, MatchSnapshot, MatchStatus, Team
 from app.schemas import (
-    CompetitionCreate, CompetitionRead, MatchCreate, MatchRead, TeamCreate, TeamRead,
+    CompetitionCreate, CompetitionRead, EventRead, MatchCreate, MatchRead, SnapshotRead,
+    TeamCreate, TeamRead,
 )
 
 router = APIRouter(tags=["catalog"])
@@ -71,10 +72,27 @@ def create_match(body: MatchCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/matches", response_model=list[MatchRead])
-def list_matches(db: Session = Depends(get_db)):
-    return db.scalars(select(Match).order_by(Match.kickoff)).all()
+def list_matches(status: MatchStatus | None = None, db: Session = Depends(get_db)):
+    query = select(Match).order_by(Match.kickoff)
+    if status is not None:
+        query = query.where(Match.status == status)
+    return db.scalars(query).all()
 
 
 @router.get("/matches/{match_id}", response_model=MatchRead)
 def get_match(match_id: int, db: Session = Depends(get_db)):
     return _get_or_404(db, Match, match_id)
+
+
+@router.get("/matches/{match_id}/events", response_model=list[EventRead])
+def list_match_events(match_id: int, db: Session = Depends(get_db)):
+    _get_or_404(db, Match, match_id)
+    return db.scalars(select(MatchEvent).where(MatchEvent.match_id == match_id)
+                      .order_by(MatchEvent.elapsed_minute, MatchEvent.id)).all()
+
+
+@router.get("/matches/{match_id}/snapshots", response_model=list[SnapshotRead])
+def list_match_snapshots(match_id: int, db: Session = Depends(get_db)):
+    _get_or_404(db, Match, match_id)
+    return db.scalars(select(MatchSnapshot).where(MatchSnapshot.match_id == match_id)
+                      .order_by(MatchSnapshot.recorded_at, MatchSnapshot.id)).all()

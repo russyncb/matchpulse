@@ -50,3 +50,24 @@ class MatchRead(MatchCreate, ORMModel):
     home_team: TeamRead
     away_team: TeamRead
     competition: CompetitionRead
+
+
+class SnapshotRead(ORMModel):
+    id: int
+    match_id: int
+    status: str | None
+    elapsed_minute: int | None
+    home_score: int
+    away_score: int
+    recorded_at: datetime
+
+
+class EventRead(ORMModel):
+    id: int
+    provider: str
+    provider_event_id: str
+    match_id: int
+    team_id: int | None
+    event_type: str
+    elapsed_minute: int | None
+    payload: dict | None
