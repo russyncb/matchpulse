@@ -11,6 +11,7 @@ class Rule(Base):
     __tablename__ = "rules"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    code: Mapped[str] = mapped_column(String(20), unique=True)  # e.g. "R001"
     name: Mapped[str] = mapped_column(String(200), unique=True)
     condition: Mapped[dict] = mapped_column(JSONB)
     enabled: Mapped[bool] = mapped_column(Boolean, server_default=text("true"))

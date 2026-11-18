@@ -10,6 +10,7 @@ from app.db.session import SessionLocal
 from app.providers.gateway import ProviderGateway
 from app.providers.replay import ReplayProvider
 from app.providers.sportmonks import create_sportmonks_gateway
+from app.rules.catalogue import seed_catalogue
 from app.worker.jobs import WorkerContext, build_jobs
 from app.worker.scheduler import Scheduler
 
@@ -27,6 +28,8 @@ def build_gateway(settings: Settings) -> ProviderGateway:
 def main() -> None:
     settings = get_settings()
     configure_logging(settings.log_level)
+    with SessionLocal() as db:
+        logger.info("rule catalogue: %d new rules seeded", seed_catalogue(db))
     try:
         gateway = build_gateway(settings)
         ctx = WorkerContext(

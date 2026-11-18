@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.api.routes import catalog, health, providers, system
+from app.api.routes import catalog, health, providers, rules, system
 from app.config import get_settings
 from app.core.logging import configure_logging
 
@@ -24,3 +24,4 @@ app.include_router(health.router, prefix="/api/v1")
 app.include_router(catalog.router, prefix="/api/v1")
 app.include_router(providers.router, prefix="/api/v1")
 app.include_router(system.router, prefix="/api/v1")
+app.include_router(rules.router, prefix="/api/v1")

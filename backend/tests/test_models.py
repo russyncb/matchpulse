@@ -25,7 +25,7 @@ def match(db):
 
 @pytest.fixture
 def rule(db):
-    r = Rule(name="Two goal lead", condition={"field": "goal_difference", "operator": ">=", "value": 2})
+    r = Rule(code="R-TEST", name="Two goal lead", condition={"field": "goal_difference", "operator": ">=", "value": 2})
     db.add(r)
     db.commit()
     return r

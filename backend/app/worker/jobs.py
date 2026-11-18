@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import select
 
 from app.models import Competition
+from app.rules.engine import RuleEngine
 from app.providers.gateway import ProviderGateway
 from app.services.activity import has_active_matches, stale_matches
 from app.services.snapshots import record_snapshots
@@ -26,6 +27,7 @@ class WorkerContext:
     snapshot_interval: timedelta = timedelta(minutes=5)
     stale_after: timedelta = timedelta(minutes=10)
     always_poll: bool = False  # demo/replay mode: skip the "is anything live?" check
+    fresh_within: timedelta = timedelta(minutes=3)  # older match data is not evaluated
 
 
 def _from_sync(sync: SyncResult, note: str) -> JobResult:
@@ -95,10 +97,20 @@ def reconcile_job(ctx: WorkerContext) -> JobResult:
     return _combine(results)
 
 
+def rules_job(ctx: WorkerContext) -> JobResult:
+    """Database only (no API requests): evaluate rules for live matches and resolve finished ones."""
+    with ctx.session_factory() as db:
+        summary = RuleEngine(db, fresh_within=ctx.fresh_within).evaluate_active(ctx.clock())
+    if summary.matches == 0 and summary.skipped_stale == 0:
+        return JobResult("skipped", "no matches to evaluate")
+    return JobResult("ok", summary.describe())
+
+
 def build_jobs(ctx: WorkerContext, *, live_seconds: int = 60) -> list[Job]:
     return [
         Job("competitions", timedelta(hours=6), lambda: competitions_job(ctx)),
         Job("fixtures", timedelta(hours=6), lambda: fixtures_job(ctx)),
         Job("live", timedelta(seconds=live_seconds), lambda: live_job(ctx)),
         Job("reconcile", timedelta(minutes=10), lambda: reconcile_job(ctx)),
+        Job("rules", timedelta(seconds=min(30, live_seconds)), lambda: rules_job(ctx)),
     ]

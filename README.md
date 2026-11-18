@@ -61,3 +61,25 @@ resumes the schedule.
 `.env`, run `docker compose up -d`, and watch a scripted match play out (2 goals, a red card, a late
 goal) in about 40 seconds. Remove those lines and run `docker compose down -v` afterwards to wipe the
 demo data, then start normally.
+
+## Rules engine (Phase 5)
+Rules are data (`rules` table), seeded from `app/rules/catalogue.py` when the worker starts (existing
+rules are never overwritten). The worker's `rules` job evaluates every live match against every enabled
+rule using only database facts (minute, status, scores, goal_difference, red_cards, last_goal_minute,
+score_age_seconds). It makes no API requests.
+
+Alert lifecycle: condition becomes true -> ACTIVE alert; stays true -> nothing; becomes false ->
+RESOLVED; match ends or rule disabled -> RESOLVED with that reason. A rule marked `reactivate: true`
+can raise a new alert when its condition becomes true again (R001, R002, R004, R008); the others fire
+at most once per match (R003, R005, R006, R007). The database allows only one ACTIVE alert per match+rule.
+Matches whose data is older than 3 minutes are skipped, not evaluated.
+
+    curl http://localhost:8000/api/v1/rules
+    curl "http://localhost:8000/api/v1/alerts?state=ACTIVE"
+    curl http://localhost:8000/api/v1/matches/1/alerts
+    curl http://localhost:8000/api/v1/matches/1/evaluation    # why each rule fires or not, right now
+    curl -X POST http://localhost:8000/api/v1/rules/validate -H "Content-Type: application/json" -d '{...}'
+
+Add your own rule with `POST /api/v1/rules`; invalid definitions are rejected with the reason.
+Rule format: {"code","name","severity","reactivate","all":[{"field","operator","value"}]}
+with operators eq, gt, gte, lt, lte. See `app/rules/schema.py` for the allowed fields.

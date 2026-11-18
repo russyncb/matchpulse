@@ -71,3 +71,32 @@ class EventRead(ORMModel):
     event_type: str
     elapsed_minute: int | None
     payload: dict | None
+
+
+class RuleRead(ORMModel):
+    id: int
+    code: str
+    name: str
+    description: str | None
+    enabled: bool
+    severity: str
+    reactivate: bool
+    all: list[dict]
+
+
+class RuleEnable(BaseModel):
+    enabled: bool
+
+
+class AlertRead(BaseModel):
+    id: int
+    match_id: int
+    match: str  # "Home vs Away"
+    rule_code: str
+    rule_name: str
+    severity: str
+    state: str
+    observed_values: dict | None
+    triggered_at: datetime
+    resolved_at: datetime | None
+    resolved_values: dict | None

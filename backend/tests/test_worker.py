@@ -4,9 +4,10 @@ import pytest
 from sqlalchemy import func, select
 
 from app.db.session import SessionLocal
-from app.models import Match, MatchEvent, MatchSnapshot, MatchStatus, SyncStatus
+from app.models import Alert, Match, MatchEvent, MatchSnapshot, MatchStatus, Rule, SyncStatus
 from app.providers.gateway import ProviderGateway
 from app.providers.replay import ReplayProvider
+from app.rules.catalogue import seed_catalogue
 from app.worker.jobs import WorkerContext, build_jobs
 from app.worker.scheduler import Job, JobResult, Scheduler
 from tests.test_gateway import Clock, ScriptedProvider
@@ -20,6 +21,8 @@ class FixedClock(Clock):
 
 
 def replay_scheduler(clock, provider=None, **ctx_kw):
+    with SessionLocal() as seed_db:
+        seed_catalogue(seed_db)  # the worker does this at startup
     gateway = ProviderGateway(provider or ReplayProvider(), session_factory=SessionLocal, clock=clock,
                               sleep=lambda s: None)
     ctx = WorkerContext(gateway=gateway, session_factory=SessionLocal, clock=clock, always_poll=True, **ctx_kw)
@@ -33,7 +36,7 @@ def test_worker_plays_a_full_match_and_survives_restart(db):
     scheduler = replay_scheduler(clock, provider)
 
     first = scheduler.run_once()  # fresh database: every job is due
-    assert first == ["competitions", "fixtures", "live", "reconcile"]
+    assert first == ["competitions", "fixtures", "live", "reconcile", "rules"]
     for _ in range(6):  # the remaining steps of the scripted match, one poll per minute
         clock.advance(seconds=60)
         assert "live" in scheduler.run_once()
@@ -46,6 +49,18 @@ def test_worker_plays_a_full_match_and_survives_restart(db):
                          .order_by(MatchSnapshot.recorded_at, MatchSnapshot.id)).all()
     assert history == [("IN_PLAY", 0, 0), ("IN_PLAY", 1, 0), ("IN_PLAY", 2, 0), ("HALF_TIME", 2, 0),
                        ("IN_PLAY", 2, 0), ("IN_PLAY", 2, 1), ("FINISHED", 2, 1)]  # score changes recorded
+
+    # the rules engine saw the whole match: alerts were raised as conditions became true...
+    rows = db.execute(select(Alert.id)).all()
+    by_code = {code: (state.value, (resolved or {}).get("reason")) for code, state, resolved in db.execute(
+        select(Rule.code, Alert.state, Alert.resolved_values).join(Rule, Rule.id == Alert.rule_id))}
+    assert by_code == {
+        "R001": ("RESOLVED", "condition_false"),  # lead of two shrank to one at 82'
+        "R002": ("RESOLVED", "match_ended"), "R005": ("RESOLVED", "match_ended"),
+        "R006": ("RESOLVED", "match_ended"), "R007": ("RESOLVED", "match_ended"),
+        "R008": ("RESOLVED", "match_ended"),
+    }
+    assert len(rows) == 6 and not db.scalars(select(Alert).where(Alert.state == "ACTIVE")).all()
 
     # restart: a brand new scheduler must not re-run jobs that are not due
     assert replay_scheduler(clock, provider).run_once() == []
@@ -61,7 +76,7 @@ def test_job_status_is_tracked(db):
     clock = FixedClock()
     replay_scheduler(clock).run_once()
     rows = {r.job_name: r for r in db.scalars(select(SyncStatus))}
-    assert set(rows) == {"worker_heartbeat", "competitions", "fixtures", "live", "reconcile"}
+    assert set(rows) == {"worker_heartbeat", "competitions", "fixtures", "live", "reconcile", "rules"}
     assert rows["live"].last_success_at == T0 and "1 matches" in rows["live"].last_result
     assert rows["reconcile"].last_result == "nothing stale" and rows["reconcile"].last_success_at is None
 

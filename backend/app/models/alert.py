@@ -34,6 +34,7 @@ class Alert(Base):
         default=AlertState.ACTIVE,
         server_default=AlertState.ACTIVE.value,
     )
-    observed_values: Mapped[dict | None] = mapped_column(JSONB)
+    observed_values: Mapped[dict | None] = mapped_column(JSONB)  # fact values when it triggered
+    resolved_values: Mapped[dict | None] = mapped_column(JSONB)  # {reason, values} when it resolved
     triggered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
